@@ -1,0 +1,14 @@
+# Dependencies (reinstall anytime with: npm install)
+node_modules/
+
+# Secrets - passwords, API keys, database URLs
+.env
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editor clutter
+.DS_Store
+Thumbs.db
+.vscode/
