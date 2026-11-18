@@ -3,6 +3,7 @@ node_modules/
 
 # Secrets - passwords, API keys, database URLs
 .env
+data/*.json
 
 # Logs
 *.log
