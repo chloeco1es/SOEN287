@@ -1,10 +1,22 @@
+:root {
+    --font-logo: "Sansita", sans-serif;
+
+    --color-1: #59465c;
+    --color-2: #a1778a;
+    --color-3: #613e53;
+    --color-4: #d9d9a2;
+    --color-5: #8ca448;
+    --color-6: #dcc4bc;
+
+    background-color: var(--color-6);
+}
+
 *, *::before, *::after {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    /* font-family: system-ui, sans-serif; */
     line-height: 1.5;
 }
 
@@ -15,6 +27,50 @@ header {
     align-items: center;
     gap: 1rem;
     padding: 1rem;
+    background-color: var(--color-3);
+    color: white;
+}
+
+.logo {
+    font-family: var(--font-logo);
+    font-weight: 800;
+    font-style: italic;
+    color: white;
+    text-decoration: none;
+}
+.logo-sm {
+    font-size: 1rem;
+}
+.logo-md {
+    font-size: 1.5rem;
+}
+.logo-lg {
+    font-size: 3rem;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    background-color: var(--color-2);
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+}
+.button:hover {
+    filter: brightness(1.15);
+}
+.button-sm {
+    font-size: 1rem;
+}
+.button-md {
+    font-size: 1.25rem;
+}
+.button-lg {
+    font-size: 1.5rem;
 }
 
 header h1, header p {
@@ -27,27 +83,43 @@ nav {
 }
 
 main {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     max-width: 960px;
     margin: 0 auto;
     padding: 2rem 1rem;
     text-align: center;
 }
 
+.features {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: var(--color-5);
+}
+
+.features h2 {
+    margin: 0;
+}
+
 .cards {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin-top: 2rem;
 }
 
 .card {
-    padding: 1.5rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: var(--color-4);
 }
 
 footer {
-    background-color: grey;
+    background-color: var(--color-3);
+    color: white;
     padding: 1rem;
 }
 

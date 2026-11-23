@@ -4,38 +4,49 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DashWise</title>
+
+        <!-- Sansita ExtraBold 800 Italic (logo) -->
+        <link href="https://fonts.googleapis.com/css2?family=Sansita:ital,wght@1,800&display=swap" rel="stylesheet">
+        
         <link rel="stylesheet" href="css/styles.css">
     </head>
     <body>
         <header>
-            <div class="brand">
-                <h1>DashWise</h1>
-                <p>Today's assignments, at a glance.</p>
-            </div>
+            <a href="index.html" class="logo logo-md">DashWise</a>
             <nav>
-                <button>Log In</button>
-                <button>Sign Up</button>
+                <a href="login.html" class="button">Log In</a>
+                <a href="register.html" class="button">Sign Up</a>
             </nav>
         </header>
         <main>
-            <h1>Today's assignments, at a glance.</h1>
-            <p>One sentence pitch</p>
-            <button>Get Started</button>
-            <section>
+            <section class="hero">
+                <h1>Today's assignments, at a glance.</h1>
+                <p>DashWise helps students turn a messy pile of assignments into a dashboard they actually want to open every day.</p>
+                <a href="register.html" class="button button-lg">Get Started</a>
+            </section>
+            <section class="features">
+                <h2>Features</h2>
                 <div class="cards">
                     <article class="card">
+                        <h3>Today at a glance</h3>
                         <p>First feature: seeing today's tasks at a glance</p>
                     </article>
                     <article class="card">
+                        <h3>Title 2</h3>
                         <p>Second feature: choosing task deadlines or not</p>
                     </article>
                     <article class="card">
+                        <h3>Title 3</h3>
                         <p>Third feature: daily count of tasks checked off</p>
                     </article>
                 </div>
             </section>
         </main>
-        <footer>This is the footer</footer>
+        <footer>
+            <span class="logo logo-sm">DashWise</span>
+            <p>© 2026 DashWise</p>
+            <p>Made by Chloe Coles for SOEN 287 Q 2262 - Fall 2026 - Dr. Yuhong Yan</p>
+        </footer>
         <script src="js/main.js"></script>
     </body>
 </html>
