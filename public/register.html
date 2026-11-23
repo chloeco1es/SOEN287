@@ -24,9 +24,8 @@
             <section class="auth">
                 <h1>Create your account</h1>
 
-                <form id="register-form" class="auth-form" action="/register" method="post">
-                    <!-- error messages appear here -->
-                    <p id="form-error" class="form-error" role="alert"></p>
+                <form id="register-form" class="auth-form" action="/register" method="post" novalidate>
+                    <div id="form-error" class="form-error" role="alert"></div> <!-- error messages appear here -->
 
                     <div class="field">
                         <label for="name">Name</label>
@@ -61,5 +60,6 @@
             <p>© 2026 DashWise</p>
             <p>Made by Chloe Coles for SOEN 287 Q 2262 - Fall 2026 - Dr. Yuhong Yan</p>
         </footer>
+        <script src="js/register.js"></script>
     </body>
 </html>

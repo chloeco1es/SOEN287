@@ -150,8 +150,13 @@ footer {
     font-weight: 600;
 }
 
-.field input:user-invalid {
-    border-color: red;
+.field input[aria-invalid="true"] {
+    border-color: darkred;
+}
+
+.form-error ul {
+    margin: 0;
+    padding-left: 1.25rem;
 }
 
 .tip {
@@ -160,7 +165,7 @@ footer {
 
 .form-error {
     margin: 0;
-    color: red;
+    color: darkred;
 }
 
 .form-error:empty {
