@@ -22,41 +22,45 @@
         <main>
             <h1>Your dashboard</h1>
 
-            <!-- progress numbers; dashboard.js fills these in -->
-            <section class="panel stats" aria-live="polite">
-                <h2>Today</h2>
-                <p><strong id="done-today">0</strong> checked off today</p>
-                <p><strong id="tasks-left">0</strong> still to do</p>
-            </section>
+            <div class="dashboard">
+                <!-- right column on wide screens, top of the page on phones -->
+                <div class="sidebar">
+                    <!-- progress numbers; dashboard.js fills these in -->
+                    <section class="panel stats" aria-live="polite">
+                        <h2>Today</h2>
+                        <p><strong id="done-today">0</strong> checked off today</p>
+                        <p><strong id="tasks-left">0</strong> still to do</p>
+                    </section>
 
-            <!-- form for adding a new task -->
-            <section class="panel">
-                <h2>Add a task</h2>
-                <form id="task-form" class="task-form" novalidate>
-                    <div id="form-error" class="form-error" role="alert"></div>
-                    <!-- error messages appear here -->
+                    <!-- form for adding a new task -->
+                    <section class="panel">
+                        <h2>Add a task</h2>
+                        <form id="task-form" class="task-form" novalidate>
+                            <div id="form-error" class="form-error" role="alert"></div> <!-- error messages appear here -->
 
-                    <div class="field">
-                        <label for="title">Task</label>
-                        <input type="text" id="title" name="title" maxlength="100" required>
-                    </div>
+                            <div class="field">
+                                <label for="title">Task</label>
+                                <input type="text" id="title" name="title" maxlength="100" required>
+                            </div>
 
-                    <div class="field">
-                        <label for="dueDate">Due date <span class="tip">(optional)</span></label>
-                        <input type="date" id="dueDate" name="dueDate">
-                    </div>
+                            <div class="field">
+                                <label for="dueDate">Due<span class="tip">(optional)</span></label>
+                                <input type="date" id="dueDate" name="dueDate">
+                            </div>
 
-                    <button type="submit" class="button">Add Task</button>
-                </form>
-            </section>
+                            <button type="submit" class="button">Add Task</button>
+                        </form>
+                    </section>
+                </div>
 
-            <!-- the user's tasks get added inside the <ul> by dashboard.js -->
-            <section class="panel">
-                <h2>Your tasks</h2>
-                <div id="list-error" class="form-error" role="alert"></div>
-                <p id="empty-message">No tasks yet. Add one above!</p>
-                <ul id="task-list" class="task-list"></ul>
-            </section>
+                <!-- left column on wide screens; the user's tasks get added inside the <ul> by dashboard.js -->
+                <section class="panel tasks-panel">
+                    <h2>Your tasks</h2>
+                    <div id="list-error" class="form-error" role="alert"></div>
+                    <p id="empty-message">No tasks yet. Add one with the form!</p>
+                    <ul id="task-list" class="task-list"></ul>
+                </section>
+            </div>
         </main>
         <footer>
             <span class="logo logo-sm">DashWise</span>
