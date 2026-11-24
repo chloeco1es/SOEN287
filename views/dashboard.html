@@ -21,12 +21,40 @@
         </header>
         <main>
             <h1>Your dashboard</h1>
-            <p>Tasks will go here.</p>
+            <!-- form for adding a new task -->
+            <section class="panel">
+                <h2>Add a task</h2>
+                <form id="task-form" class="task-form" novalidate>
+                    <div id="form-error" class="form-error" role="alert"></div>
+                    <!-- error messages appear here -->
+
+                    <div class="field">
+                        <label for="title">Task</label>
+                        <input type="text" id="title" name="title" maxlength="100" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="dueDate">Due date <span class="tip">(optional)</span></label>
+                        <input type="date" id="dueDate" name="dueDate">
+                    </div>
+
+                    <button type="submit" class="button">Add Task</button>
+                </form>
+            </section>
+
+            <!-- the user's tasks get added inside the <ul> by dashboard.js -->
+            <section class="panel">
+                <h2>Your tasks</h2>
+                <div id="list-error" class="form-error" role="alert"></div>
+                <p id="empty-message">No tasks yet. Add one above!</p>
+                <ul id="task-list" class="task-list"></ul>
+            </section>
         </main>
         <footer>
             <span class="logo logo-sm">DashWise</span>
             <p>© 2026 DashWise</p>
             <p>Made by Chloe Coles for SOEN 287 Q 2262 - Fall 2026 - Dr. Yuhong Yan</p>
         </footer>
+        <script src="/js/dashboard.js"></script>
     </body>
 </html>
