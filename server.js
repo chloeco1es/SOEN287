@@ -2,6 +2,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth');
 
 const app = express();
@@ -9,6 +10,9 @@ const app = express();
 // read form data and JSON sent by the browser, and put it in req.body
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+// read cookies sent by the browser and put them in req.cookies
+app.use(cookieParser());
 
 // serve everything in public/ (HTML, CSS, browser JS) as-is
 app.use(express.static('public'));
