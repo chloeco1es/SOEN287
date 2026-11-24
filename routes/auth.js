@@ -74,7 +74,12 @@ router.post('/login', async (req, res) => {
         maxAge: 2 * 60 * 60 * 1000, // 2 hours, in milliseconds
     });
 
-    res.json({ok: true, redirect: '/dashboard.html'});
+    res.json({ok: true, redirect: '/dashboard'});
+});
+
+router.post('/logout', (req, res) => {
+    res.clearCookie('token'); // delete the login cookie
+    res.redirect('/login.html');
 });
 
 module.exports = router;

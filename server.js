@@ -2,7 +2,10 @@
 require('dotenv').config();
 
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth');
+const path = require('path');
+const requireLogin = require('./middleware/requireLogin');
 
 const app = express();
 
@@ -10,11 +13,19 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+// read cookies sent by the browser and put them in req.cookies
+app.use(cookieParser());
+
 // serve everything in public/ (HTML, CSS, browser JS) as-is
 app.use(express.static('public'));
 
 // own routes (like POST /register)
 app.use(authRoutes);
+
+// the dashboard is only sent if requireLogin lets the request through
+app.get('/dashboard', requireLogin, (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'dashboard.html'));
+});
 
 // error handler: any error in a route ends up here instead of crashing the server
 // Express knows this is an error handler because it has 4 parameters
