@@ -10,11 +10,26 @@ let tasks = [];
 function createTaskItem(task) {
     const item = document.createElement('li');
     item.className = 'task';
+    if (task.done) {
+        item.classList.add('task-done');
+    }
+
+    // the label wraps the checkbox and the title, so clicking the text also ticks the box
+    const label = document.createElement('label');
+    label.className = 'task-label';
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = task.done;
+    checkbox.addEventListener('change', () => toggleTask(task, checkbox));
+    label.append(checkbox);
 
     const title = document.createElement('span');
     title.className = 'task-title';
     title.textContent = task.title; // textContent, not innerHTML: "<script>" shows up as plain text
-    item.append(title);
+    label.append(title);
+
+    item.append(label);
 
     // only show a due date if the task has one
     if (task.dueDate) {
@@ -24,6 +39,14 @@ function createTaskItem(task) {
         due.textContent = 'Due ' + task.dueDate;
         item.append(due);
     }
+
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button'; // not a form submit button
+    deleteButton.className = 'button button-sm';
+    deleteButton.textContent = 'Delete';
+    deleteButton.setAttribute('aria-label', 'Delete ' + task.title);
+    deleteButton.addEventListener('click', () => deleteTask(task));
+    item.append(deleteButton);
 
     return item;
 }
@@ -174,6 +197,84 @@ taskForm.addEventListener('input', () => {
         showErrors(validate());
     }
 });
+
+// ----- CHECK OFF AND DELETE -----
+
+// tick or untick a task
+async function toggleTask(task, checkbox) {
+    listError.textContent = '';
+    checkbox.disabled = true; // no clicking again until the server answers
+
+    try {
+        const response = await fetch('/api/tasks/' + task.id, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            // the server's validateTask needs the title every time, so send the whole task, not just "done"
+            body: JSON.stringify({
+                title: task.title,
+                dueDate: task.dueDate, // null is fine: the server treats it as "no date"
+                done: checkbox.checked,
+            }),
+        });
+
+        if (response.status === 401) {
+            window.location.href = '/login.html';
+            return;
+        }
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // swap the old task for the server's updated copy (it has the new completedAt)
+            const index = tasks.findIndex((item) => item.id === task.id);
+            tasks[index] = result.task;
+            renderTasks();
+        }
+        else {
+            checkbox.checked = !checkbox.checked; // undo the tick so the screen matches the server
+            listError.textContent = result.errors[0].message;
+        }
+    }
+    catch (err) {
+        checkbox.checked = !checkbox.checked;
+        listError.textContent = 'Could not save that change. Please try again.';
+    }
+    finally {
+        checkbox.disabled = false;
+    }
+}
+
+// remove a task after asking first
+async function deleteTask(task) {
+    listError.textContent = '';
+
+    if (!confirm('Delete "' + task.title + '"?')) {
+        return; // user clicked Cancel
+    }
+
+    try {
+        const response = await fetch('/api/tasks/' + task.id, {method: 'DELETE'});
+
+        if (response.status === 401) {
+            window.location.href = '/login.html';
+            return;
+        }
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // keep every task except the deleted one
+            tasks = tasks.filter((item) => item.id !== task.id);
+            renderTasks();
+        }
+        else {
+            listError.textContent = result.errors[0].message;
+        }
+    }
+    catch (err) {
+        listError.textContent = 'Could not delete that task. Please try again.';
+    }
+}
 
 // run once when the page loads
 loadTasks();
