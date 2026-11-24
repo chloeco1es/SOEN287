@@ -77,4 +77,9 @@ router.post('/login', async (req, res) => {
     res.json({ok: true, redirect: '/dashboard'});
 });
 
+router.post('/logout', (req, res) => {
+    res.clearCookie('token'); // delete the login cookie
+    res.redirect('/login.html');
+});
+
 module.exports = router;
