@@ -2,6 +2,8 @@
 const taskList = document.querySelector('#task-list');
 const emptyMessage = document.querySelector('#empty-message');
 const listError = document.querySelector('#list-error');
+const doneTodayCount = document.querySelector('#done-today');
+const tasksLeftCount = document.querySelector('#tasks-left');
 
 // the user's tasks, as last sent by the server
 let tasks = [];
@@ -67,6 +69,30 @@ function createTaskItem(task) {
     return item;
 }
 
+// true if an ISO time like "2026-11-24T19:05:00.000Z" falls on today's date
+function isToday(isoString) {
+    // completedAt is saved in UTC; new Date() turns it into the user's own time zone, so a task ticked at 11pm in Montreal still counts as today (UTC says it's tomorrow)
+    return new Date(isoString).toDateString() === new Date().toDateString();
+}
+
+// count the tasks and update the numbers at the top of the page
+function renderStats() {
+    let doneToday = 0;
+    let left = 0;
+
+    for (const task of tasks) {
+        if (task.done && task.completedAt && isToday(task.completedAt)) {
+            doneToday++;
+        }
+        if (!task.done) {
+            left++;
+        }
+    }
+
+    doneTodayCount.textContent = doneToday;
+    tasksLeftCount.textContent = left;
+}
+
 // redraw the whole list from the tasks array
 function renderTasks() {
     taskList.innerHTML = ''; // remove the old items
@@ -81,6 +107,7 @@ function renderTasks() {
 
     // hide "No tasks yet" when there is at least one task
     emptyMessage.hidden = tasks.length > 0;
+    renderStats(); // keep the numbers in sync with the list
 }
 
 // ask the server for this user's tasks
