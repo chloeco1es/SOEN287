@@ -1,5 +1,5 @@
 // elements from dashboard.html
-const taskList = document.querySelector('#task-list');
+const taskGroups = document.querySelector('#task-groups');
 const emptyMessage = document.querySelector('#empty-message');
 const listError = document.querySelector('#list-error');
 const doneTodayCount = document.querySelector('#done-today');
@@ -122,16 +122,88 @@ function renderListOptions() {
     }
 }
 
-// redraw the whole list from the tasks array
-function renderTasks() {
-    taskList.innerHTML = ''; // remove the old items
+// sort rule for tasks: earliest due date first, tasks with no date at the bottom
+// sort() calls this with two tasks: return a negative number to put a first, positive to put b first, 0 to leave them
+function compareByDueDate(a, b) {
+    if (!a.dueDate && !b.dueDate) {
+        return 0;
+    }
+    if (!a.dueDate) {
+        return 1; // a has no date: a goes after b
+    }
+    if (!b.dueDate) {
+        return -1;
+    }
+    // "YYYY-MM-DD" text sorts in the same order as the dates, so no Date objects needed
+    if (a.dueDate < b.dueDate) {
+        return -1;
+    }
+    if (a.dueDate > b.dueDate) {
+        return 1;
+    }
+    return 0;
+}
+
+// sort rule for groups: alphabetical, "No list" (name null) at the bottom
+function compareByListName(a, b) {
+    if (a.name === null) {
+        return 1;
+    }
+    if (b.name === null) {
+        return -1;
+    }
+    return a.name.localeCompare(b.name); // compares text alphabetically
+}
+
+// turn the tasks array into groups like [{name: 'SOEN 287', tasks: [...]}, {name: null, tasks: [...]}]
+function groupByList() {
+    const groups = [];
+
     for (const task of tasks) {
-        if (task.id === editingId) {
-            taskList.append(createEditItem(task)); // this one is being edited: show the form
+        const name = task.list || null; // older tasks have no list at all, so treat them as null too
+
+        // find this list's group, or make it if this is the first task in that list
+        let group = groups.find((item) => item.name === name);
+        if (!group) {
+            group = {name: name, tasks: []};
+            groups.push(group);
         }
-        else {
-            taskList.append(createTaskItem(task));
+        group.tasks.push(task);
+    }
+
+    groups.sort(compareByListName);
+    for (const group of groups) {
+        group.tasks.sort(compareByDueDate);
+    }
+
+    return groups;
+}
+
+// redraw all the task groups from the tasks array
+function renderTasks() {
+    taskGroups.innerHTML = ''; // remove the old groups
+
+    for (const group of groupByList()) {
+        const groupBox = document.createElement('div');
+        groupBox.className = 'task-group';
+
+        const heading = document.createElement('h3');
+        heading.textContent = group.name || 'No list'; // list names are user input too: textContent keeps them XSS-safe
+        groupBox.append(heading);
+
+        const list = document.createElement('ul');
+        list.className = 'task-list';
+        for (const task of group.tasks) {
+            if (task.id === editingId) {
+                list.append(createEditItem(task)); // this one is being edited: show the form
+            }
+            else {
+                list.append(createTaskItem(task));
+            }
         }
+        groupBox.append(list);
+
+        taskGroups.append(groupBox);
     }
 
     // hide "No tasks yet" when there is at least one task
