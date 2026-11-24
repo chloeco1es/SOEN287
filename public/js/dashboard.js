@@ -40,12 +40,14 @@ function createTaskItem(task) {
     checkbox.addEventListener('change', () => toggleTask(task, checkbox));
     label.append(checkbox);
 
+    // title and due date go in one wrapper so they always stay together
+    const text = document.createElement('span');
+    text.className = 'task-text';
+
     const title = document.createElement('span');
     title.className = 'task-title';
     title.textContent = task.title; // textContent, not innerHTML: "<script>" shows up as plain text
-    label.append(title);
-
-    item.append(label);
+    text.append(title);
 
     // only show a due date if the task has one
     if (task.dueDate) {
@@ -53,8 +55,15 @@ function createTaskItem(task) {
         due.className = 'task-due';
         due.dateTime = task.dueDate; // machine-readable date (i.e. 2026-12-01)
         due.textContent = 'Due ' + task.dueDate;
-        item.append(due);
+        text.append(due);
     }
+
+    label.append(text);
+    item.append(label);
+
+    // Edit and Delete go in one wrapper so they always wrap together
+    const actions = document.createElement('div');
+    actions.className = 'task-actions';
 
     const editButton = document.createElement('button');
     editButton.type = 'button';
@@ -67,7 +76,7 @@ function createTaskItem(task) {
         // put the cursor in the title box (getElementById, not querySelector: ids can start with a digit, which breaks "#..." selectors)
         document.getElementById('edit-title-' + task.id).focus();
     });
-    item.append(editButton);
+    actions.append(editButton);
 
     const deleteButton = document.createElement('button');
     deleteButton.type = 'button'; // not a form submit button
@@ -75,8 +84,9 @@ function createTaskItem(task) {
     deleteButton.textContent = 'Delete';
     deleteButton.setAttribute('aria-label', 'Delete ' + task.title);
     deleteButton.addEventListener('click', () => deleteTask(task));
-    item.append(deleteButton);
-
+    actions.append(deleteButton);
+    item.append(actions);
+    
     return item;
 }
 

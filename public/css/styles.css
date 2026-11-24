@@ -250,7 +250,22 @@ footer {
     width: 1.25rem;
     height: 1.25rem;
     flex-shrink: 0; /* checkbox keeps its size */
-    accent-color: var(--color-3); /* checkbox in the brand colour */
+    accent-color: var(--color-3);
+}
+
+/* title on top, due date underneath */
+.task-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* lets long titles wrap instead of stretching the row */
+}
+
+/* Edit + Delete: one unit that never splits */
+.task-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;    /* never squeeze the buttons */
+    margin-left: auto; /* stay on the right, even when wrapped onto their own line */
 }
 
 .task-title {
