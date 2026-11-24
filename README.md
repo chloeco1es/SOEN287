@@ -28,3 +28,7 @@ For SOEN 287 Q 2262 - Fall 2026 - Dr. Yuhong Yan
 - Server-side validation of every form submission
 - Persistence using JSON documents
 - JWT-based authentication
+
+## Credits
+
+**Colour palette:** [Carolyn Cochrane](https://carolyncochrane.com/blogs/nature-photography-blog/62500675-new-color-schemes-free-palette-guide)
