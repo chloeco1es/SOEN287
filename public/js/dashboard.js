@@ -4,6 +4,7 @@ const emptyMessage = document.querySelector('#empty-message');
 const listError = document.querySelector('#list-error');
 const doneTodayCount = document.querySelector('#done-today');
 const tasksLeftCount = document.querySelector('#tasks-left');
+const listOptions = document.querySelector('#list-options');
 
 // the user's tasks, as last sent by the server
 let tasks = [];
@@ -103,6 +104,24 @@ function renderStats() {
     tasksLeftCount.textContent = left;
 }
 
+// fill the List suggestions with every list name the user has used, each one once
+function renderListOptions() {
+    const names = [];
+    for (const task of tasks) {
+        if (task.list && !names.includes(task.list)) {
+            names.push(task.list);
+        }
+    }
+    names.sort(); // alphabetical
+
+    listOptions.innerHTML = ''; // remove the old options
+    for (const name of names) {
+        const option = document.createElement('option');
+        option.value = name;
+        listOptions.append(option);
+    }
+}
+
 // redraw the whole list from the tasks array
 function renderTasks() {
     taskList.innerHTML = ''; // remove the old items
@@ -118,6 +137,7 @@ function renderTasks() {
     // hide "No tasks yet" when there is at least one task
     emptyMessage.hidden = tasks.length > 0;
     renderStats(); // keep the numbers in sync with the list
+    renderListOptions(); // keep the suggestions in sync too
 }
 
 // ask the server for this user's tasks
@@ -156,6 +176,7 @@ const addButton = taskForm.querySelector('button[type="submit"]');
 const fields = {
     title: document.querySelector('#title'),
     dueDate: document.querySelector('#dueDate'),
+    list: document.querySelector('#list'),
 };
 
 let submittedOnce = false;
@@ -219,6 +240,7 @@ taskForm.addEventListener('submit', async (event) => {
             body: JSON.stringify({
                 title: fields.title.value,
                 dueDate: fields.dueDate.value, // '' if no date was picked; the server turns that into null
+                list: fields.list.value, // '' if left empty; the server turns that into null
             }),
         });
 
@@ -269,6 +291,8 @@ async function toggleTask(task, checkbox) {
             body: JSON.stringify({
                 title: task.title,
                 dueDate: task.dueDate, // null is fine: the server treats it as "no date"
+                list: task.list, // send it back unchanged, or the server would erase it
+                list: fields.list.value, // '' if left empty; the server turns that into null
                 done: checkbox.checked,
             }),
         });
@@ -373,6 +397,22 @@ function createEditItem(task) {
     dueField.append(dueLabel, dueInput);
     form.append(dueField);
 
+    // list
+    const listField = document.createElement('div');
+    listField.className = 'field';
+    const listLabel = document.createElement('label');
+    listLabel.htmlFor = 'edit-list-' + task.id;
+    listLabel.textContent = 'List (optional)';
+    const listInput = document.createElement('input');
+    listInput.type = 'text';
+    listInput.id = 'edit-list-' + task.id;
+    listInput.maxLength = 50;
+    listInput.value = task.list || '';
+    listInput.setAttribute('list', 'list-options'); // in JS, input.list can only be read, not set, so use setAttribute
+    listInput.autocomplete = 'off';
+    listField.append(listLabel, listInput);
+    form.append(listField);
+
     const saveButton = document.createElement('button');
     saveButton.type = 'submit'; // pressing Enter in an input also submits
     saveButton.className = 'button button-sm';
@@ -391,7 +431,7 @@ function createEditItem(task) {
 
     form.addEventListener('submit', (event) => {
         event.preventDefault();
-        saveEdit(task, titleInput.value, dueInput.value, errorBox, saveButton);
+        saveEdit(task, titleInput.value, dueInput.value, listInput.value, errorBox, saveButton);
     });
 
     item.append(form);
@@ -399,7 +439,7 @@ function createEditItem(task) {
 }
 
 // send the edited title and date to the server
-async function saveEdit(task, title, dueDate, errorBox, saveButton) {
+async function saveEdit(task, title, dueDate, list, errorBox, saveButton) {
     errorBox.textContent = '';
     saveButton.disabled = true;
 
@@ -410,6 +450,7 @@ async function saveEdit(task, title, dueDate, errorBox, saveButton) {
             body: JSON.stringify({
                 title: title,
                 dueDate: dueDate,
+                list: list,
                 done: task.done, // keep the checkbox as it was
             }),
         });

@@ -48,6 +48,12 @@
                                 <input type="date" id="dueDate" name="dueDate">
                             </div>
 
+                            <div class="field">
+                                <label for="list">List <span class="tip">(optional)</span></label>
+                                <input type="text" id="list" name="list" maxlength="50" list="list-options" autocomplete="off">
+                                <datalist id="list-options"></datalist> <!-- dashboard.js fills this with lists you've already used -->
+                            </div>
+
                             <button type="submit" class="button">Add Task</button>
                         </form>
                     </section>
