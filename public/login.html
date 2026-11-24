@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Log In | DashWise</title>
+
+        <!-- connect to Google Fonts early so the fonts load faster -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+        <!-- Bricolage Grotesque (headings), DM Sans (body), Sansita Italic (logo) -->
+        <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=DM+Sans:wght@400;600&family=Sansita:ital,wght@1,800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/styles.css">
+    </head>
+    <body>
+        <header>
+            <a href="index.html" class="logo logo-md">DashWise</a>
+            <nav>
+                <a href="register.html" class="button">Sign Up</a>
+            </nav>
+        </header>
+        <main>
+            <section class="auth">
+                <h1>Welcome back!</h1>
+
+                <form id="login-form" class="auth-form" action="/login" method="post" novalidate>
+                    <div id="form-error" class="form-error" role="alert"></div> <!-- error messages appear here -->
+
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" autocomplete="email" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" autocomplete="current-password" required>
+                    </div>
+
+                    <button type="submit" class="button button-md">Log In</button>
+                </form>
+
+                <p>New to DashWise? <a href="register.html" class="button button-sm">Sign up</a></p>
+            </section>
+        </main>
+        <footer>
+            <span class="logo logo-sm">DashWise</span>
+            <p>© 2026 DashWise</p>
+            <p>Made by Chloe Coles for SOEN 287 Q 2262 - Fall 2026 - Dr. Yuhong Yan</p>
+        </footer>
+        <script src="js/login.js"></script>
+    </body>
+</html>
