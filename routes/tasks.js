@@ -27,6 +27,7 @@ router.post('/', async (req, res) => {
         userId: req.userId, // comes from the token, never from req.body
         title: values.title,
         dueDate: values.dueDate,
+        list: values.list,
         done: false,
         completedAt: null,
         createdAt: new Date().toISOString(),
@@ -64,6 +65,7 @@ router.put('/:id', async (req, res) => {
     // task points to the object inside the tasks array, so changing it changes the array
     task.title = values.title;
     task.dueDate = values.dueDate;
+    task.list = values.list;
     task.done = values.done;
     await writeJSON('tasks', tasks);
 
