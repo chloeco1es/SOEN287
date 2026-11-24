@@ -86,7 +86,7 @@ function createTaskItem(task) {
     deleteButton.addEventListener('click', () => deleteTask(task));
     actions.append(deleteButton);
     item.append(actions);
-    
+
     return item;
 }
 
@@ -374,7 +374,6 @@ async function toggleTask(task, checkbox) {
                 title: task.title,
                 dueDate: task.dueDate, // null is fine: the server treats it as "no date"
                 list: task.list, // send it back unchanged, or the server would erase it
-                list: fields.list.value, // '' if left empty; the server turns that into null
                 done: checkbox.checked,
             }),
         });
