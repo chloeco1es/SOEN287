@@ -11,6 +11,16 @@ let tasks = [];
 // the id of the task being edited right now (null means none)
 let editingId = null;
 
+// if the login has expired (401), send the user to log in again
+// returns true so the caller knows to stop
+function loginExpired(response) {
+    if (response.status === 401) {
+        window.location.href = '/login.html';
+        return true;
+    }
+    return false;
+}
+
 // build one <li> for one task
 function createTaskItem(task) {
     const item = document.createElement('li');
@@ -118,8 +128,7 @@ async function loadTasks() {
         const response = await fetch('/api/tasks');
 
         // login expired: requireLogin sent back 401, so go log in again
-        if (response.status === 401) {
-            window.location.href = '/login.html';
+        if (loginExpired(response)) {
             return;
         }
 
@@ -213,8 +222,7 @@ taskForm.addEventListener('submit', async (event) => {
             }),
         });
 
-        if (response.status === 401) {
-            window.location.href = '/login.html';
+        if (loginExpired(response)) {
             return;
         }
 
@@ -265,8 +273,7 @@ async function toggleTask(task, checkbox) {
             }),
         });
 
-        if (response.status === 401) {
-            window.location.href = '/login.html';
+        if (loginExpired(response)) {
             return;
         }
 
@@ -303,8 +310,7 @@ async function deleteTask(task) {
     try {
         const response = await fetch('/api/tasks/' + task.id, {method: 'DELETE'});
 
-        if (response.status === 401) {
-            window.location.href = '/login.html';
+        if (loginExpired(response)) {
             return;
         }
 
@@ -408,8 +414,7 @@ async function saveEdit(task, title, dueDate, errorBox, saveButton) {
             }),
         });
 
-        if (response.status === 401) {
-            window.location.href = '/login.html';
+        if (loginExpired(response)) {
             return;
         }
 
