@@ -6,8 +6,8 @@ const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth');
 const path = require('path');
 const requireLogin = require('./middleware/requireLogin');
-
 const app = express();
+const taskRoutes = require('./routes/tasks');
 
 // read form data and JSON sent by the browser, and put it in req.body
 app.use(express.urlencoded({ extended: false }));
@@ -21,6 +21,9 @@ app.use(express.static('public'));
 
 // own routes (like POST /register)
 app.use(authRoutes);
+
+// task API: requireLogin runs first, so every task route knows who the user is
+app.use('/api/tasks', requireLogin, taskRoutes);
 
 // the dashboard is only sent if requireLogin lets the request through
 app.get('/dashboard', requireLogin, (req, res) => {
