@@ -1,12 +1,20 @@
 const jwt = require('jsonwebtoken');
 
+// pages get redirected to the login page; API requests (from fetch) get a 401 JSON error instead
+function sendToLogin(req, res) {
+    if (req.originalUrl.startsWith('/api/')) {
+        return res.status(401).json({errors: [{message: 'Please log in again.'}]});
+    }
+    return res.redirect('/login.html');
+}
+
 // runs before a protected route: only lets the request through if the user is logged in
 function requireLogin(req, res, next) {
     const token = req.cookies.token;
 
     // no cookie: not logged in
     if (!token) {
-        return res.redirect('/login.html');
+        return sendToLogin(req, res);
     }
 
     try {
@@ -18,7 +26,7 @@ function requireLogin(req, res, next) {
     catch (err) {
         // token was fake, changed, or expired
         res.clearCookie('token');
-        return res.redirect('/login.html');
+        return sendToLogin(req, res);
     }
 }
 
